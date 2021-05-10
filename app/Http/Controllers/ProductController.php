@@ -6,6 +6,17 @@ use Illuminate\Http\Request;
 
 class ProductController extends Controller
 {
+    protected $request;
+
+    public function __construct(Request $request)
+    {
+        dd($request);
+       $this->request = $request;
+
+       $this->middleware('auth')->only(['create', 'store'
+       ]);
+    }
+
     public function index()
     {
         $products = ['Product 01', 'Product 02', 'Product 03'];
@@ -28,7 +39,7 @@ class ProductController extends Controller
         return "Form para editar produto{$id}";
     }
 
-    public function store($id)
+    public function store(Request $request)
     {
         return "Cadastrando novo produto";
     }

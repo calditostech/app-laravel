@@ -19,9 +19,9 @@ class ProductController extends Controller
 
     public function index()
     {
-        $products = ['Product 01', 'Product 02', 'Product 03'];
+       $teste = 123;
 
-        return $products;
+       return view('teste', compact('teste'));
     }
 
     public function show($id)

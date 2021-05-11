@@ -11,8 +11,9 @@ class ProductController extends Controller
     public function __construct(Request $request)
     {
         dd($request);
+        /* injeção de dependencias */
        $this->request = $request;
-
+        /* para autenticar alguns metodos dos controller */
        $this->middleware('auth')->only(['create', 'store'
        ]);
     }

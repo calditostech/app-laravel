@@ -10,19 +10,18 @@ class ProductController extends Controller
 
     public function __construct(Request $request)
     {
-        dd($request);
         /* injeção de dependencias */
        $this->request = $request;
         /* para autenticar alguns metodos dos controller */
-       $this->middleware('auth')->only(['create', 'store'
-       ]);
+     /*  $this->middleware('auth')->only(['create', 'store'
+       ]); */
     }
 
     public function index()
     {
        $teste = 123;
 
-       return view('teste', compact('teste'));
+       return view('admin.pages.products.index', compact('teste'));
     }
 
     public function show($id)
@@ -32,7 +31,7 @@ class ProductController extends Controller
 
     public function create()
     {
-        return "Criando um novo produto";
+        return view('admin.pages.products.create');
     }
 
     public function edit($id)

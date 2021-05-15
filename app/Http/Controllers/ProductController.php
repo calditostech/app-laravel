@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers;
 
+
 use Illuminate\Http\Request;
+use App\Http\Requests\StoreUpdateProductRequest;
+use Illuminate\Foundation\Http\FormRequest;
 
 class ProductController extends Controller
 {
@@ -26,6 +29,7 @@ class ProductController extends Controller
 
     public function show($id)
     {
+        
         return "Exibindo o produto por {$id}";
     }
 
@@ -34,14 +38,37 @@ class ProductController extends Controller
         return view('admin.pages.products.create');
     }
 
+    /**
+     * 
+     * 
+     * @param \App\Http\Request\StoreUpdateProductRequest $request
+     * @return \Illuminate\Http\Response
+     */
+
     public function edit($id)
     {
         return "Form para editar produto{$id}";
     }
 
-    public function store(Request $request)
+    public function store(StoreUpdateProductRequest $request)
     {
-        return "Cadastrando novo produto";
+       /*
+        $request->validate([
+            'name' => 'required|min:3|max:255',
+            'description' => 'nullable|min:3|max:10000',
+            'photo' => 'required|image',
+        ]);
+        */
+        //dd($request->all());
+        //dd($request->only(['name', 'description]));
+        //dd($request->input('teste', 'default'));
+        //dd($request->except('_token', 'name'));
+        //dd($request->file('photo'));
+        if($request->file('photo')->isValid()){
+           //dd($request->file('photo')->storeAs('products'));
+          $nameFile = $request->name . '.' . $request->photo->extension();
+          dd($request->file('photo')->storeAs('products', $nameFile));
+        }
     }
 
     public function update($id)

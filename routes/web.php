@@ -1,5 +1,6 @@
 <?php
 use App\Http\Controllers\Admin;
+use App\Http\Requests\StoreUpdateProductRequest;
 
 /*Route::resource('products', 'ProductController');*/
 

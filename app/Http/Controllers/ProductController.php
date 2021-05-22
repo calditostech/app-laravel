@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-
+use App\Models\Product;
 use Illuminate\Http\Request;
 use App\Http\Requests\StoreUpdateProductRequest;
 use Illuminate\Foundation\Http\FormRequest;
@@ -22,15 +22,19 @@ class ProductController extends Controller
 
     public function index()
     {
-       $teste = 123;
+       $products = Product::paginate(15);
 
-       return view('admin.pages.products.index', compact('teste'));
+       return view('admin.pages.products.index', ['products' => $products,]);
     }
 
     public function show($id)
     {
-        
-        return "Exibindo o produto por {$id}";
+        //$product = Product::where('id', $id)->first();
+        if(!$product = Product::find($id))
+           return redirect()->back();
+        return view('admin.pages.products.show',
+        ['product' => $product
+        ]);
     }
 
     public function create()

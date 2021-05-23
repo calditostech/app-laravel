@@ -10,11 +10,13 @@ use Illuminate\Foundation\Http\FormRequest;
 class ProductController extends Controller
 {
     protected $request;
+    private $repository;
 
-    public function __construct(Request $request)
+    public function __construct(Request $request, Product $product)
     {
         /* injeção de dependencias */
        $this->request = $request;
+       $this->repository = $product;
         /* para autenticar alguns metodos dos controller */
      /*  $this->middleware('auth')->only(['create', 'store'
        ]); */
@@ -30,7 +32,7 @@ class ProductController extends Controller
     public function show($id)
     {
         //$product = Product::where('id', $id)->first();
-        if(!$product = Product::find($id))
+        if(!$product = $this->repository->find($id))
            return redirect()->back();
         return view('admin.pages.products.show',
         ['product' => $product
@@ -51,11 +53,26 @@ class ProductController extends Controller
 
     public function edit($id)
     {
-        return "Form para editar produto{$id}";
+        if(!$product = $this->repository->find($id))
+             return redirect()->back();
+       return view('admin.pages.products.edit', compact('product'));
     }
 
     public function store(StoreUpdateProductRequest $request)
     {
+       $data = $request->only('name', 'description', 'price', 'image');
+
+       $this->repository->create($data);
+
+       return redirect()->route('products.index');
+
+
+       /*
+       $product = new Product;
+       $product->name = $request->name;
+       $product->save();
+       */
+
        /*
         $request->validate([
             'name' => 'required|min:3|max:255',
@@ -75,13 +92,24 @@ class ProductController extends Controller
         }
     }
 
-    public function update($id)
+    public function update(StoreUpdateProductRequest $request, $id)
     {
-        return "Editando produto {$id}";
+        if(!$product = $this->repository->find($id))
+           return redirect()->back();
+        
+           $product->update($request->all());
+
+           return redirect()->route('products.index');
     }
 
     public function destroy($id)
     {
-        return "Deletando produto {$id}";
+        $product = $this->repository->where('id', $id)->first();
+        if(!$product = Product::find($id))
+           return redirect()->back();
+        
+           $product->delete();
+
+           return redirect()->route('products.index');
     }
 }
